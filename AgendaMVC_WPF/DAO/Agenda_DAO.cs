@@ -1,0 +1,54 @@
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore; // si tu utilises EF Core
+using AgendaMVC_WPF.agendaDB;
+
+namespace AgendaMVC_WPF.DAO
+{
+    public class Agenda_DAO
+    {
+        private readonly AgendaContext _context;
+
+        // Tu peux injecter le contexte ou l'instancier directement
+        public Agenda_DAO()
+        {
+            _context = new AgendaContext();
+        }
+
+        // Exemple de méthodes CRUD pour "Contact"
+        public async Task<List<Contact>> GetAllContactsAsync()
+        {
+            return await _context.Contacts.ToListAsync();
+        }
+
+        public async Task<Contact> GetContactByIdAsync(int id)
+        {
+            return await _context.Contacts.FindAsync(id);
+        }
+
+        public async Task AddContactAsync(Contact contact)
+        {
+            _context.Contacts.Add(contact);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateContactAsync(Contact contact)
+        {
+            _context.Contacts.Update(contact);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteContactAsync(int id)
+        {
+            var contact = await _context.Contacts.FindAsync(id);
+            if (contact != null)
+            {
+                _context.Contacts.Remove(contact);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        // Idem pour Tache, Category, RéseauxSociaux, etc.
+    }
+}
