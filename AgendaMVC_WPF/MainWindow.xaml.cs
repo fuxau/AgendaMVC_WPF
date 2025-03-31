@@ -21,9 +21,7 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        ContentControl contentControl = new ContentControl();
-        contentControl.Content = new Contact();
-        this.Content = contentControl;
+  
     }
 
     private bool IsMaximize = false;
@@ -59,7 +57,7 @@ public partial class MainWindow : Window
     private void Button_Click(object sender, RoutedEventArgs e)
     {
         ContentControl contentControl = new ContentControl();
-        contentControl.Content = new Contact();
+        contentControl.Content = new Contactes();
         this.Content = contentControl;
     }
 }

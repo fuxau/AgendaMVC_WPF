@@ -17,9 +17,13 @@ namespace AgendaMVC_WPF.DAO
         }
 
         // Exemple de méthodes CRUD pour "Contact"
-        public async Task<List<Contact>> GetAllContactsAsync()
+        public List<Contact> GetAllContacts()
         {
-            return await _context.Contacts.ToListAsync();
+            using (var context = new AgendaContext())
+            {
+                var AllContacts = context.Contacts.ToList();
+                return AllContacts;
+            }
         }
 
         public async Task<Contact> GetContactByIdAsync(int id)
