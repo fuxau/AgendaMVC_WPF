@@ -102,6 +102,8 @@
             </Grid>
 
             <!--Main Section-->
+            <ContentControl x:Name="ContentControl"
+                Grid.Row="1"/>
             <Grid Grid.Column="1" Margin="30 20 20 20">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
