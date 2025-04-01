@@ -9,12 +9,12 @@ namespace AgendaMVC_WPF.view
     {
         private Contactes _parent;
         public bool ContactAjoute { get; private set; } = false;
-
-        public AjouterContact()
+        public AjouterContact(Contactes parent)
         {
             InitializeComponent();
             _parent = parent;
         }
+
 
         private void Valider_Click(object sender, RoutedEventArgs e)
         {
