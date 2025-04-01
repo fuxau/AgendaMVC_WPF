@@ -31,10 +31,14 @@ namespace AgendaMVC_WPF.DAO
             return await _context.Contacts.FindAsync(id);
         }
 
-        public async Task AddContactAsync(Contact contact)
+        public string AddContact(Contact contact)
         {
-            _context.Contacts.Add(contact);
-            await _context.SaveChangesAsync();
+            using (var Context = new AgendaContext())
+            {
+                Context.Contacts.Add(contact);
+                Context.SaveChanges();
+            }
+            return "Contact ajouté avec succès";
         }
 
         public async Task UpdateContactAsync(Contact contact)

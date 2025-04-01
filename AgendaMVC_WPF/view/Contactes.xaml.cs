@@ -23,7 +23,19 @@ namespace AgendaMVC_WPF.view
         public Contactes()
         {
             InitializeComponent();
-            LV_Artists.ItemsSource = new DAO.Agenda_DAO().GetAllContacts();
+            membersDataGrid.ItemsSource = new DAO.Agenda_DAO().GetAllContacts();
         }
+
+        public void RefreshContacts()
+        {
+            var contacts = new Agenda_DAO().GetAllContacts();
+            membersDataGrid.ItemsSource = contacts;
+
+            if (contacts.Any())
+                DernierIdTextBlock.Text = $"Dernier ID : {contacts.Max(c => c.Id)}";
+            else
+                DernierIdTextBlock.Text = "Aucun contact";
+        }
+
     }
 }
