@@ -1,0 +1,182 @@
+﻿<UserControl x:Class="AgendaMVC_WPF.view.Parametres"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:local="clr-namespace:AgendaMVC_WPF.view"
+             mc:Ignorable="d"
+             d:DesignHeight="410" d:DesignWidth="1000"
+             Background="Transparent">
+
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+
+        <Style x:Key="SectionTitleStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="Margin" Value="0,0,0,20"/>
+        </Style>
+
+        <Style x:Key="SubTitleStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="Margin" Value="0,0,0,10"/>
+        </Style>
+
+        <Style x:Key="InfoLabelStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="#666666"/>
+            <Setter Property="Margin" Value="0,0,0,5"/>
+        </Style>
+
+        <Style x:Key="InfoValueStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="Margin" Value="0,0,0,15"/>
+        </Style>
+
+        <Style x:Key="ActionButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#6C63FF"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="15,10"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" 
+                                Background="{TemplateBinding Background}" 
+                                CornerRadius="8" 
+                                BorderThickness="0"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#5A52E0" TargetName="border"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="DangerButtonStyle" TargetType="Button" BasedOn="{StaticResource ActionButtonStyle}">
+            <Setter Property="Background" Value="#FF6B6B"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#E05555"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Margin="0,10,0,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- En-tête avec titre -->
+        <TextBlock Text="Paramètres" 
+                   Style="{StaticResource SectionTitleStyle}"/>
+
+        <!-- Contenu des paramètres -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="0,10,0,0">
+                <!-- Section Compte Google -->
+                <Border Background="White" 
+                        CornerRadius="15" 
+                        Padding="20" 
+                        Margin="0,0,0,20">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="10" ShadowDepth="1" Direction="270" Opacity="0.1" Color="#AAAAAA"/>
+                    </Border.Effect>
+                    <Grid>
+                        <StackPanel>
+                            <TextBlock Text="Compte Google Calendar" 
+                                       Style="{StaticResource SubTitleStyle}"/>
+
+                            <!-- Panneau pour utilisateur connecté -->
+                            <StackPanel x:Name="ConnectedPanel" Visibility="Collapsed">
+                                <Grid Margin="0,10,0,20">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                   
+                                </Grid>
+
+                                <Button Content="Se déconnecter" 
+                                        Style="{StaticResource DangerButtonStyle}" 
+                                        HorizontalAlignment="Left"
+                                        Click="DisconnectButton_Click"/>
+                            </StackPanel>
+
+                            <!-- Panneau pour utilisateur non connecté -->
+                            <StackPanel x:Name="NotConnectedPanel">
+                                <TextBlock Text="Vous n'êtes pas connecté à Google Calendar." 
+                                           Style="{StaticResource InfoLabelStyle}" 
+                                           Margin="0,0,0,15"/>
+
+                                <Button Content="Se connecter à Google Calendar" 
+                                        Style="{StaticResource ActionButtonStyle}" 
+                                        HorizontalAlignment="Left"
+                                        Click="ConnectButton_Click"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <!-- Indicateur de chargement -->
+                        <Grid x:Name="LoadingIndicator" 
+                              Background="#80FFFFFF" 
+                              Visibility="Collapsed">
+                            <StackPanel HorizontalAlignment="Center" 
+                                        VerticalAlignment="Center">
+                                <TextBlock Text="Chargement..." 
+                                           FontSize="16" 
+                                           FontWeight="SemiBold" 
+                                           Foreground="#666666"
+                                           HorizontalAlignment="Center"
+                                           Margin="0,0,0,10"/>
+                                <ProgressBar IsIndeterminate="True" 
+                                             Width="200" 
+                                             Height="5"
+                                             Foreground="#6C63FF"/>
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
+                </Border>
+
+
+                <!-- Section À propos -->
+                <Border Background="White" 
+                        CornerRadius="15" 
+                        Padding="20">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="10" ShadowDepth="1" Direction="270" Opacity="0.1" Color="#AAAAAA"/>
+                    </Border.Effect>
+                    <StackPanel>
+                        <TextBlock Text="À propos" 
+                                   Style="{StaticResource SubTitleStyle}"/>
+
+                        <TextBlock Text="Agenda MVC WPF" 
+                                   Style="{StaticResource InfoValueStyle}" 
+                                   Margin="0,10,0,5"/>
+
+                        <TextBlock Text="Version 1.0.0" 
+                                   Style="{StaticResource InfoLabelStyle}" 
+                                   Margin="0,0,0,15"/>
+
+                        <TextBlock Text="© 2025 - Tous droits réservés" 
+                                   Style="{StaticResource InfoLabelStyle}"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

@@ -1,94 +1,121 @@
-﻿using System.Text;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using AgendaMVC_WPF.DAO;
 using AgendaMVC_WPF.view;
-using MahApps.Metro.Controls;
+using MahApps.Metro.IconPacks;
+using System.Diagnostics;
 
-namespace AgendaMVC_WPF;
-
-/// <summary>
-/// Interaction logic for MainWindow.xaml
-/// </summary>
-public partial class MainWindow : Window
+namespace AgendaMVC_WPF
 {
-
-    public Contactes _contactesUC;
-    public MainWindow()
+    public partial class MainWindow : Window
     {
-        InitializeComponent();
-        _contactesUC = new Contactes();
-        ContentControl.Content = _contactesUC;
-        ContentControl.Content = new Contactes();
-        var dao = new Agenda_DAO();
-        var contacts = dao.GetAllContacts();
-        if (contacts != null && contacts.Any())
+        private Button _currentActiveButton;
+
+        public MainWindow()
         {
-            int dernierId = contacts.Max(c => c.Id);
-            DernierIdTextBlock.Text = $"{dernierId} total contacts";
-        }
-        else
-        {
-            DernierIdTextBlock.Text = "Aucun contact";
+            InitializeComponent();
+            ContentControl.Content = new Contactes();
+            _currentActiveButton = BTN_Contacts;
+            SetActiveButton(BTN_Contacts);
+            var dao = new Agenda_DAO();
         }
 
-
-    }
-
-    private bool IsMaximize = false;
-    private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-    {
-        if (e.ClickCount == 2)
+        private bool IsMaximize = false;
+        private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (IsMaximize)
+            if (e.ClickCount == 2)
             {
-                this.WindowState = WindowState.Normal;
-                this.Width = 1080;
-                this.Height = 720;
+                if (IsMaximize)
+                {
+                    this.WindowState = WindowState.Normal;
+                    this.Width = 1080;
+                    this.Height = 720;
 
-                IsMaximize = false;
+                    IsMaximize = false;
+                }
+                else
+                {
+                    this.WindowState = WindowState.Maximized;
+
+                    IsMaximize = true;
+                }
+            }
+        }
+
+        private void Border_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                this.DragMove();
+            }
+        }
+
+        private void BTN_Contacts_Click(object sender, RoutedEventArgs e)
+        {
+            ContentControl.Content = new Contactes();
+            SetActiveButton(BTN_Contacts);
+        }
+
+        private void BTN_Taches_Click(object sender, RoutedEventArgs e)
+        {
+            ContentControl.Content = new Taches();
+            SetActiveButton(BTN_Taches);
+        }
+
+        private void BTN_Evenements_Click(object sender, RoutedEventArgs e)
+        {
+            ContentControl.Content = new Evenements();
+            SetActiveButton(BTN_Evenements);
+        }
+
+        private void BTN_Parametres_Click(object sender, RoutedEventArgs e)
+        {
+            ContentControl.Content = new Parametres();
+            SetActiveButton(BTN_Parametres);
+        }
+
+        private void SetActiveButton(Button button)
+        {
+            // Réinitialiser le bouton actif précédent
+            if (_currentActiveButton != null)
+            {
+                _currentActiveButton.Background = (SolidColorBrush)new BrushConverter().ConvertFrom("#623ED0");
+            }
+
+            // Définir le nouveau bouton actif
+            button.Background = (SolidColorBrush)new BrushConverter().ConvertFrom("#7B5CD6");
+            _currentActiveButton = button;
+        }
+
+
+
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
+        private void MaximizeButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (WindowState == WindowState.Maximized)
+            {
+                WindowState = WindowState.Normal;
+                MaximizeIcon.Kind = PackIconMaterialKind.WindowMaximize;
             }
             else
             {
-                this.WindowState = WindowState.Maximized;
-
-                IsMaximize = true;
+                WindowState = WindowState.Maximized;
+                MaximizeIcon.Kind = PackIconMaterialKind.WindowRestore;
             }
         }
-    }
 
-    private void Border_MouseDown(object sender, MouseButtonEventArgs e)
-    {
-        if (e.ChangedButton == MouseButton.Left)
+        private void MinimizeButton_Click(object sender, RoutedEventArgs e)
         {
-            this.DragMove();
+            WindowState = WindowState.Minimized;
         }
     }
-
-    private void BTN_Contacts_Click(object sender, RoutedEventArgs e)
-    {
-       
-        ContentControl.Content = new Contactes();
-        
-    }
-
-    private void ADD_BTN_Click(object sender, RoutedEventArgs e)
-    {
-        var fenetre = new AjouterContact();
-        fenetre.ShowDialog();
-
-        if (fenetre.ContactAjoute)
-        {
-            _contactesUC.RefreshContacts();
-        }
-    }
-    
-
 }
