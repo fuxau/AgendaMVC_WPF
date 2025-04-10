@@ -15,7 +15,7 @@ namespace AgendaMVC_WPF.view
         private GoogleCalendarService _calendarService;
         private List<CalendarEvent> _events;
         private DateTime _currentMonth;
-        private const string API_KEY = "AIzaSyDQZMuVkQqF9UQIlHNEWxrIjUXwxkfFWiQ"; // Votre clé API Google
+        private const string API_KEY = ""; // Votre clé API Google
 
         public Evenements()
         {
